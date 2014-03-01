@@ -1,0 +1,25 @@
+{
+  "name": "photoshopjs-core",
+  "private": true,
+  "version": "0.0.0",
+  "description": "(work in progress)",
+  "main": "scripts/js/lib/core.js",
+  "scripts": {
+    "prepublish": "node ./node_modules/coffee-script/bin/cake build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AriaMinaei/photoshopjs-core.git"
+  },
+  "keywords": ["photoshop", "extendscript"],
+  "author": "Aria Minaei",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AriaMinaei/photoshopjs-core"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "coffee-script": "~1.7.1"
+  }
+}
