@@ -20,15 +20,9 @@ module.exports = class Document
 
 		@_globalUnit
 
-	globalUnitToPixel: (n) ->
+	globalUnitToPixels: (n) ->
 
-		switch u = @getGlobalUnit()
-
-			when 'px' then n
-
-			else
-
-				throw Error "Don't know unit '#{u}'"
+		(new UnitValue n, @getGlobalUnit()).as 'px'
 
 	asDom: ->
 

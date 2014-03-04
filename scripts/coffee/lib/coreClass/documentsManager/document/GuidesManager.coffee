@@ -34,7 +34,7 @@ module.exports = class GuidesManager
 			.obj 'new', 'guide', =>
 
 				desc()
-				.unitDouble 'position', 'pixelsUnit', @_doc.globalUnitToPixel(position)
+				.unitDouble 'position', 'pixelsUnit', @_doc.globalUnitToPixels(position)
 				.enum 'orientation', 'orientation', orientation
 
 		return
