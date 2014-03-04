@@ -1,8 +1,6 @@
-Main = require './core/Main'
+CoreClass = require './CoreClass'
 console = require './tools/console'
 
-alert @
+$.global.console = console
 
-@_ = _ = new Main @
-
-module.exports = _
+module.exports = CoreClass.create $.global

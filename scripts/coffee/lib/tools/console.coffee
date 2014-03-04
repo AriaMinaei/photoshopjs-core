@@ -1,36 +1,46 @@
 module.exports = console =
 
-	inspectLimit: 6
+	inspectLimit: 100
 
 	native: no
 
-	_inspectSingle: (given, limit = console.inspectLimit, covered = []) ->
+	_useAlert: no
+
+	useAlert: ->
+
+		self._useAlert = yes
+
+		self
+
+	_inspectSingle: (given, persist = {limit: console.inspectLimit, covered: []}) ->
 
 		r = ''
 
-		limit--
+		if given is null
 
-		if limit <= 0
+			return 'null'
 
-			return (typeof given) + '-Limit!'
+		if typeof given in ['object', 'function']
 
-		if typeof given is 'object'
-
-			if given in covered
+			if given in persist.covered
 
 				return '[Recursive]'
 
 			else
 
-				covered.push given
+				persist.covered.push given
 
 			items = []
 
 			iterator = (v, k) ->
 
-				k = "'" + k + "' -> "
+				persist.limit--
 
-				items.push k + console._inspectSingle(v, limit, covered)
+				return if persist.limit <= 0
+
+				k = k + " -> "
+
+				items.push k + console._inspectSingle(v, persist)
 
 			if given instanceof Array
 
@@ -40,19 +50,47 @@ module.exports = console =
 
 			else
 
-				type = 'object'
+				if typeof given is 'function'
 
-				iterator(v, k) for k, v of given
+					type = '#Function'
 
-			r = prependToEachLine ("\n" + items.join(", \n")), '     '
+				else
 
-		else if typeof given is 'function'
+					type = '#Object'
 
-			r = 'function'
+					if given.constructor?.name?
+
+						name = given.constructor.name
+
+						if name isnt 'Object'
+
+							type = '#' + name
+
+				for k of given
+
+					try
+
+						v = given[k]
+
+						iterator(v, k)
+
+			r = prependToEachLine ("\n" + items.join(", \n")), '   '
 
 		else if given is undefined
 
-			r = 'undefined'
+			return 'undefined'
+
+		else if typeof given is 'string'
+
+			if given.length > 200
+
+				given = given.substr 0, 200
+
+			return '"' + given + '"'
+
+		else if typeof given in ['boolean', 'number']
+
+			return String given
 
 		else
 
@@ -62,54 +100,118 @@ module.exports = console =
 
 			type = typeof given
 
-		'[' + type + '] -> ' + r
+		type + ' -> ' + r
 
+	_inspect: (args) ->
 
-	_inspect: ->
+		r = for v in args
 
-		r = []
+			console._inspectSingle v
 
-		r = for v in arguments
+		r.join "   "
 
-			console._inspectSingle(v)
+	_output: (s) ->
 
-		r.join("   ", r)
+		if self._useAlert
+
+			alert s
+
+		else
+
+			$.write '\n----------------------\n' + s + '\n'
+
+		return
 
 	log: ->
 
-		@alert.apply @, arguments
+		self._output self._inspect arguments
 
 	alert: ->
 
-		alert(@_inspect.apply(@, arguments))
+		alert self._inspect.apply(self, arguments)
 
 	error: (e) ->
 
 		if typeof e is 'string'
 
-			alert "Error: " + e
+			self._output "Error: " + e
 
 			throw e
 
-		alert("Error: " + e.message + "\n"
+		self._output("Error: " + e.message + "\n"
 			+ "@" + e.sourceURL + ":" + e.line
 			)
 
 		throw e
 
+	warn: (args...) ->
+
+		args.unshift 'Warning'
+
+		@log.apply @, args
+
+	typeOf: (what) ->
+
+		if what is null
+
+			return 'null'
+
+		switch typeof what
+
+			when 'string' then return 'String'
+
+			when 'number' then return 'Number'
+
+			when 'boolean' then return 'Boolean'
+
+			when 'undefined' then return 'undefined'
+
+			when 'object'
+
+				if what instanceof Function
+
+					return 'Function'
+
+				return '#' + what.constructor.name
+
+			else
+
+				return typeof what
+
 	notice: ->
 
-		alert("Notice: " + Array.from(arguments).join(" "))
+		args.unshift 'Notice'
 
-	type: (v) ->
+		@log.apply @, args
 
-		t = typeof v
+	keys: (obj) ->
 
-		if t in ['string', 'number', 'boolean']
+		unless typeof obj is 'object'
 
-			alert(t + ': ' + v)
+			return @console.apply @, arguments
 
-		alert(v)
+		s = ''
+
+		for k of obj
+
+ 			try
+
+ 				v = obj[k]
+
+ 				type = @typeOf v
+
+ 			catch
+
+ 				type = '#inaccessible'
+
+ 			s += '\n   ' + k + ' -> ' + type
+
+ 		@_output s
+
+ 		return
+
+
+self = console
 
 prependToEachLine = (str, toPrepend) ->
 
