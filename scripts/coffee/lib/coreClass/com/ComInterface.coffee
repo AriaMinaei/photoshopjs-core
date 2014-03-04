@@ -18,18 +18,27 @@ module.exports = class ComInterface
 
 		id < @_unassignedIDStartsAt or id > @_unassignedIDStartsAt + 1000
 
-	exec: (eventString, descCallback, showDialog = no) =>
+	exec: (event, desc, showDialog = no) =>
 
-		executer = new ActionExecuter eventString, descCallback, showDialog
+		new ActionExecuter event, desc, showDialog
 
-		executer._execute()
+	get: (ref) =>
+
+		ref = Ref.refify ref
+
+		new Desc executeActionGet ref
 
 	desc: =>
 
-		return new Desc
+		new Desc
+
+	ref: =>
+
+		new Ref
 
 	id: (what) =>
 
+		# direct typeID
 		if typeof what is 'number'
 
 			unless @idMaybeValid what
@@ -54,27 +63,26 @@ module.exports = class ComInterface
 
 			throw Error "Empty string/charID isn't valid"
 
+		if what.length is 4
+
+			id = charIDToTypeID what
+
+			str = typeIDToStringID id
+
+			if str.length > 0
+
+				console.log "Use stringID '#{str}' instead of charID '#{what}'"
+
+				return id
+
 		id = stringIDToTypeID what
 
-		return id if @idMaybeValid id
-
-		if what.length isnt 4
+		unless @idMaybeValid id
 
 			console.warn "stringID '#{what}' doesn't seem to be valid"
 
-			return id
-
-		id = charIDToTypeID what
-
-		str = typeIDToStringID id
-
-		if str.length is 0
-
-			throw Error "string/charID '#{what}' is most likely invalid"
-
-		console.log "Use stringID '#{str}' instead of charID '#{what}'"
-
 		id
 
+Ref = require './Ref'
 Desc = require './Desc'
 ActionExecuter = require './ActionExecuter'

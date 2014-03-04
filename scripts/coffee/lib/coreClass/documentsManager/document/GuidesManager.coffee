@@ -28,13 +28,13 @@ module.exports = class GuidesManager
 
 	_addSingle: (orientation, position) ->
 
-		exec 'make', ->
+		exec 'make', =>
 
 			desc()
-			.obj 'new', 'guide', ->
+			.obj 'new', 'guide', =>
 
 				desc()
-				.unitDouble 'position', 'pixelsUnit', position
+				.unitDouble 'position', 'pixelsUnit', @_doc.globalUnitToPixel(position)
 				.enum 'orientation', 'orientation', orientation
 
 		return

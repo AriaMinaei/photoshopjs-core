@@ -68,6 +68,8 @@ module.exports = console =
 
 				for k of given
 
+					continue if k in ['prototype', 'parent']
+
 					try
 
 						v = given[k]

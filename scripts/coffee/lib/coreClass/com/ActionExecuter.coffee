@@ -1,20 +1,13 @@
 module.exports = class ActionExecuter
 
-	constructor: (event, desc, showDialog = no) ->
-
-		@event = com.id event
+	constructor: (@event, desc, showDialog = no) ->
 
 		@showDialog = if showDialog is yes then DialogModes.YES else DialogModes.NO
 
 		@desc = Desc.descify desc
 
-		@result = null
+		@result = executeAction com.id(@event), @desc, @showDialog
 
-	_execute: ->
-
-		@result = executeAction @event, @desc, @showDialog
-
-		@
 
 com = require '../com'
 Desc = require './Desc'

@@ -1,8 +1,8 @@
 module.exports = class Desc
 
-	constructor: ->
+	constructor: (descriptor = new ActionDescriptor) ->
 
-		@descriptor = new ActionDescriptor
+		@descriptor = self.descify descriptor
 
 	obj: (key, cls, desc) ->
 
@@ -22,6 +22,10 @@ module.exports = class Desc
 
 		@
 
+	getInt: (key) ->
+
+		@descriptor.getInteger com.id(key)
+
 	self = @
 
 	@descify: (desc) ->
@@ -39,5 +43,7 @@ module.exports = class Desc
 			throw Error "The object is not an ActionDescriptor"
 
 		desc
+
+
 
 com = require '../com'
