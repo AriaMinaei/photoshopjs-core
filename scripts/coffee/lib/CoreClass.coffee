@@ -1,4 +1,5 @@
 DocumentsManager = require './coreClass/DocumentsManager'
+PanelHelper = require './coreClass/PanelHelper'
 com = require './coreClass/com'
 
 module.exports = class CoreClass
@@ -18,3 +19,9 @@ module.exports = class CoreClass
 		@com = com
 
 		@docs = new DocumentsManager @
+
+	panel: (name, cb) ->
+
+		new PanelHelper @, name, cb
+
+		return

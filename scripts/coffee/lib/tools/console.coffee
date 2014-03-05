@@ -12,6 +12,12 @@ module.exports = console =
 
 		self
 
+	useLog: ->
+
+		self._useAlert = no
+
+		self
+
 	_inspectSingle: (given, persist = {limit: console.inspectLimit, covered: []}) ->
 
 		r = ''
