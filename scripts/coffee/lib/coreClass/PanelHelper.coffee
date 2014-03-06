@@ -2,20 +2,26 @@ module.exports = class PanelHelper
 
 	constructor: (@_core, panelName, cb) ->
 
-		unless @_core.global._panel?
+		unless @_core.global._panels?
 
-			@_core.global._panel = {}
+			@_core.global._panels = {}
 
-		@_core.global._panel[panelName] = (received) ->
+		@_core.global._panels[panelName] = (args) ->
 
 			run = ->
 
 				console.useAlert()
 
-				args = JSON.parse received[0]
-
 				cb args
 
 				console.useLog()
 
-			do run
+			try
+
+				ret = do run
+
+				return "ok;" + ret
+
+			catch error
+
+				return "er;" + console._inspectSingle error
