@@ -40,4 +40,12 @@ module.exports = class PanelHelper
 
 			catch error
 
+				msg = error
+
+				if error.message?
+
+					msg = error.message
+
+				alert msg
+
 				return "er;" + console._inspectSingle error
