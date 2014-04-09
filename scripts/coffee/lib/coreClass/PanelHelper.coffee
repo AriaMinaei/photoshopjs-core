@@ -6,21 +6,37 @@ module.exports = class PanelHelper
 
 			@_core.global._panels = {}
 
+		core = @_core
+
 		@_core.global._panels[panelName] = (args) ->
+
+			result = null
 
 			run = ->
 
 				console.useAlert()
 
-				cb args
+				result = cb args
 
 				console.useLog()
 
 			try
 
-				ret = do run
+				try
 
-				return "ok;" + ret
+					doc = core.docs.active
+
+					domDoc = doc.asDom()
+
+				if domDoc?
+
+					domDoc.suspendHistory(panelName, 'run()')
+
+				else
+
+					do run
+
+				return "ok;" + result
 
 			catch error
 
