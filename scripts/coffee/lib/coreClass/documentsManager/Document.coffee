@@ -1,4 +1,5 @@
 GuidesManager = require './document/GuidesManager'
+{desc, exec} = require '../com'
 
 module.exports = class Document
 
