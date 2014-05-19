@@ -1,7 +1,7 @@
 {
   "name": "photoshopjs-core",
-  "private": true,
-  "version": "0.0.0",
+  "private": false,
+  "version": "0.1.0-dev.1",
   "description": "(work in progress)",
   "main": "scripts/js/lib/core.js",
   "scripts": {
@@ -9,13 +9,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/AriaMinaei/photoshopjs-core.git"
+    "url": "https://github.com/pixana/photoshopjs-core.git"
   },
   "keywords": ["photoshop", "extendscript"],
   "author": "Aria Minaei",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/AriaMinaei/photoshopjs-core"
+    "url": "https://github.com/pixana/photoshopjs-core"
   },
   "dependencies": {
   },
