@@ -5,7 +5,8 @@
   "description": "(work in progress)",
   "main": "scripts/js/lib/core.js",
   "scripts": {
-    "prepublish": "node ./node_modules/coffee-script/bin/cake build"
+    "prepublish": "node ./node_modules/coffee-script/bin/cake build",
+    "watch": "jitter scripts/coffee scripts/js -b"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
   "dependencies": {
   },
   "devDependencies": {
-    "coffee-script": "~1.7.1"
+    "coffee-script": "~1.7.1",
+    "jitter": "1.3.0"
   }
 }
