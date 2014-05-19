@@ -38,11 +38,16 @@ var idMk = charIDToTypeID( "Mk  " );
 executeAction( idMk, desc7, DialogModes.NO );
 ```
 
-Actiondescriptors can be fast, but they don't read well, they're not well-documented, and afaik, they're not easy to debug.
+ActionDescriptors can be fast, but they don't read well, they're not well-documented, and afaik, they're not easy to debug.
 
 So now, the DOM is slow and the ActionDescriptors are too complicated. The middle-ground would be to create a wrapper around ActionDescriptors with a simpler api, which is where this project is at this point.
 
 We'll be developing more Photoshop panels and that will make me add more features to this project. Chances are that at some point this project gets stable enough that I'll be able to advertize it as "A Photoshop scripting library," remove this story and write up some real docs :)
+
+## Projects using photoshopjs-core
+
+* [Griddify](http://gelobi.org/griddify) - A Photoshop panel to make guides and grids.
+* More to come
 
 ## License
 
