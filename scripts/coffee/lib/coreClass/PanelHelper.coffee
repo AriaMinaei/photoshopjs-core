@@ -1,3 +1,5 @@
+JSON = require '../tools/JSON'
+
 module.exports = class PanelHelper
 
 	constructor: (@_core, panelName, cb) ->
@@ -11,6 +13,11 @@ module.exports = class PanelHelper
 		@_core.global._panels[panelName] = (args) ->
 
 			result = null
+
+			if typeof args[0] is 'string' and args[0][0] is '{'
+
+				# CS
+				args = JSON.parse args[0]
 
 			run = ->
 
