@@ -8,13 +8,15 @@ module.exports = class GuidesManager
 
 	addHorizontal: (positions...) ->
 
-		@_add "horizontal", positions
+		# @_add "horizontal", positions
+		@_add Direction.HORIZONTAL, positions
 
 		@
 
 	addVertical: (positions...) ->
 
-		@_add "vertical", positions
+		# @_add "vertical", positions
+		@_add Direction.VERTICAL, positions
 
 		@
 
@@ -28,13 +30,18 @@ module.exports = class GuidesManager
 
 	_addSingle: (orientation, position) ->
 
-		exec 'make', =>
-
-			desc()
-			.obj 'new', 'guide', =>
-
-				desc()
-				.unitDouble 'position', 'pixelsUnit', @_doc.globalUnitToPixels(position)
-				.enum 'orientation', 'orientation', orientation
+		@_doc.asDom().guides.add(orientation, position)
 
 		return
+
+		# exec 'make', =>
+
+		# 	desc()
+		# 	.obj 'new', 'guide', =>
+
+		# 		desc()
+		# 		# .unitDouble 'position', @_doc.stringIDOfDefaultUnit() , position
+		# 		.unitDouble 'position', 'pixelsUnit', @_doc.globalUnitToPixels(position)
+		# 		.enum 'orientation', 'orientation', orientation
+
+		# return

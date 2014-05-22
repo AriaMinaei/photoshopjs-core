@@ -25,6 +25,16 @@ module.exports = class Document
 
 		(new UnitValue n, @getGlobalUnit()).as 'px'
 
+	stringIDOfDefaultUnit: ->
+
+		switch u = @getGlobalUnit()
+
+			when 'px' then 'pixelsUnit'
+
+			when 'mm' then 'millimetersUnit'
+
+			else alert "Unit #{u} isn't supported yet"
+
 	asDom: ->
 
 		unless @_dom?
