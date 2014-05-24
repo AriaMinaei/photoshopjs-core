@@ -51,7 +51,7 @@ module.exports = class ComInterface
 
 				throw Error "typeID[#{what}] doesn't translate to a stringID"
 
-			console.log "Use stringID '#{str}' instead of typeID[#{what}]"
+			# console.log "Use stringID '#{str}' instead of typeID[#{what}]"
 
 			return what
 
@@ -71,15 +71,15 @@ module.exports = class ComInterface
 
 			if str.length > 0
 
-				console.log "Use stringID '#{str}' instead of charID '#{what}'"
+				# console.log "Use stringID '#{str}' instead of charID '#{what}'"
 
 				return id
 
 		id = stringIDToTypeID what
 
-		unless @idMaybeValid id
+		# unless @idMaybeValid id
 
-			console.warn "stringID '#{what}' doesn't seem to be valid"
+		# 	console.warn "stringID '#{what}' doesn't seem to be valid"
 
 		id
 
