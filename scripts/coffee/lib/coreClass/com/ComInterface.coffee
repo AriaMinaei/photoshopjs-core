@@ -2,21 +2,21 @@ module.exports = class ComInterface
 
 	constructor: ->
 
-		@_unassignedIDStartsAt = do ->
+		# @_unassignedIDStartsAt = do ->
 
-			i = 2500
+		# 	i = 2500
 
-			loop
+		# 	loop
 
-				i++
+		# 		i++
 
-				break if typeIDToStringID(i).length is 0
+		# 		break if typeIDToStringID(i).length is 0
 
-			i
+		# 	i
 
-	idMaybeValid: (id) ->
+	# idMaybeValid: (id) ->
 
-		id < @_unassignedIDStartsAt or id > @_unassignedIDStartsAt + 1000
+	# 	id < @_unassignedIDStartsAt or id > @_unassignedIDStartsAt + 1000
 
 	exec: (event, desc, showDialog = no) =>
 
@@ -41,9 +41,9 @@ module.exports = class ComInterface
 		# direct typeID
 		if typeof what is 'number'
 
-			unless @idMaybeValid what
+			# unless @idMaybeValid what
 
-				throw Error "typeID[#{what}] doesn't seem to be valid"
+			# 	throw Error "typeID[#{what}] doesn't seem to be valid"
 
 			str = typeIDToStringID what
 
