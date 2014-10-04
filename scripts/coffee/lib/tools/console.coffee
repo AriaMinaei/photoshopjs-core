@@ -6,6 +6,8 @@ module.exports = console =
 
 	actionListLimit: 5
 
+	depthLimit: 6
+
 	native: no
 
 	_useAlert: no
@@ -22,7 +24,12 @@ module.exports = console =
 
 		self
 
-	_inspectSingle: (given, persist = {limit: console.inspectLimit, covered: []}) ->
+	_inspectSingle: (given, persist = {}) ->
+
+		persist.limit ?= console.inspectLimit
+		persist.covered ?= []
+		persist.depthLimit ?= console.depthLimit
+		persist.curDepth ?= 0
 
 		r = ''
 
@@ -63,6 +70,12 @@ module.exports = console =
 	_inspectIterable: (given, persist) ->
 
 		if given in persist.covered then return '[Recursive]' else persist.covered.push given
+
+		persist.curDepth++
+
+		if persist.curDepth > persist.depthLimit
+
+			return '[...]'
 
 		items = []
 
@@ -330,6 +343,10 @@ module.exports = console =
 
 		self._output self._inspect arguments
 
+	logShallow: (what, depth = 2, limit = 50) ->
+
+		self._output self._inspectSingle what, {depthLimit: depth, limit: limit}
+
 	alert: ->
 
 		alert self._inspect.apply(self, arguments)
@@ -426,9 +443,7 @@ t2s = typeIDToStringID
 
 isPhotoshopThingy = (thingy) ->
 
-	try
-
-		c = thingy.constructor
+	try c = thingy.constructor
 
 	return no unless c?
 
