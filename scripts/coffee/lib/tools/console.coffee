@@ -73,7 +73,15 @@ module.exports = console =
 
 		persist.curDepth++
 
+		if persist.curDepth > 2 and given is $.global
+
+			persist.curDepth--
+
+			return '[$.global]'
+
 		if persist.curDepth > persist.depthLimit
+
+			persist.curDepth--
 
 			return '[...]'
 
@@ -128,6 +136,8 @@ module.exports = console =
 				@_iterateObject given, iterator
 
 		r = prependToEachLine ("\n" + items.join(", \n")), '   '
+
+		persist.curDepth--
 
 		type + ' -> ' + r
 
@@ -343,7 +353,7 @@ module.exports = console =
 
 		self._output self._inspect arguments
 
-	logShallow: (what, depth = 2, limit = 50) ->
+	lig: (what, depth = 2, limit = 50) ->
 
 		self._output self._inspectSingle what, {depthLimit: depth, limit: limit}
 

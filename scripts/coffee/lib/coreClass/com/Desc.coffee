@@ -45,6 +45,11 @@ module.exports = class Desc
 
 		@descriptor.getInteger com.type(key)
 
+	# Gets the value of a key of type string
+	getStr: (key) ->
+
+		@descriptor.getString com.type(key)
+
 	# Gets the value of a key of type list
 	getList: (key) ->
 

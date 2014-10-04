@@ -1,5 +1,6 @@
 GuidesManager = require './document/GuidesManager'
-{desc, exec} = require '../com'
+LayersManager = require './document/LayersManager'
+{desc} = require '../com'
 
 module.exports = class Document
 
@@ -9,37 +10,22 @@ module.exports = class Document
 
 		@guides = new GuidesManager @
 
+		@layers = new LayersManager @
+
 		@_dom = null
 
-		@_globalUnit = null
+	# We're assuming this document is always active, so this
+	# method doesn't do anything right now
+	activate: ->
 
-	getGlobalUnit: ->
+		@
 
-		unless @_globalUnit?
-
-			@_globalUnit = @asDom().width.type
-
-		@_globalUnit
-
-	globalUnitToPixels: (n) ->
-
-		(new UnitValue n, @getGlobalUnit()).as 'px'
-
-	stringIDOfDefaultUnit: ->
-
-		switch u = @getGlobalUnit()
-
-			when 'px' then 'pixelsUnit'
-
-			when 'mm' then 'millimetersUnit'
-
-			else alert "Unit #{u} isn't supported yet"
-
+	# Returns the Photoshop Dom object of the current document
 	asDom: ->
 
-		unless @_dom?
+		# http://www.ps-scripts.com/bb/viewtopic.php?f=5&t=4896&sid=193b860f8acc6665ce304e644b9f404a#p22758
 
-			# http://www.ps-scripts.com/bb/viewtopic.php?f=5&t=4896&sid=193b860f8acc6665ce304e644b9f404a#p22758
+		unless @_dom?
 
 			try
 
@@ -47,12 +33,15 @@ module.exports = class Document
 
 			catch
 
+				app.refresh()
+
+			finally
+
 				$.sleep 500
 
-				exec 'Wait', ->
-
-					desc()
-					.enum "Stte", "Stte", "RdCm"
+				desc()
+				.enum "state", "state", "redrawComplete"
+			 "wait"
 
 				doc = app.activeDocument
 

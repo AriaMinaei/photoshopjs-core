@@ -1,15 +1,82 @@
+{ref, desc} = require '../../com'
+Layer = require './layersManager/Layer'
+
 module.exports = class LayersManager
 
 	constructor: (@document) ->
 
-	count: ->
+		@_core = @document
 
-		# todo: add link to the post in ps-scripts where I found this
+		@_layersById = {}
 
-		get ->
+		@_activeLayers = []
 
-			ref()
-			.prop 'property', 'numberOfLayers'
-			.enum 'document', 'ordinal', 'targetEnum'
+		@_activeLayerSituationRectified = no
 
-		.getInt 'NmbL'
+	hasActiveLayer: ->
+
+		do @_rectifyActiveLayerSituation
+
+		@_activeLayers.length is 1
+
+	hasMultipleActiveLayers: ->
+
+		do @_rectifyActiveLayerSituation
+
+		@_activeLayers.length > 1
+
+	getActive: ->
+
+		do @_rectifyActiveLayerSituation
+
+		@_activeLayers
+
+	getActiveLayer: ->
+
+		do @_rectifyActiveLayerSituation
+
+		return null if @_activeLayers.length isnt 1
+
+		@_activeLayers[0]
+
+	_rectifyActiveLayerSituation: ->
+
+		return if @_activeLayerSituationRectified
+
+		@_activeLayerSituationRectified = yes
+
+		activeLayersDesc = ref()
+		.enum 'document', 'ordinal', 'targetEnum'
+		.execGet()
+
+		if activeLayersDesc.hasKey 'targetLayers'
+
+			list = activeLayersDesc.getList 'targetLayers'
+
+			for i in [0...list.getCount()]
+
+				layerDesc = list.getDesc(i)
+
+				@_activeLayers.push @_introduceLayerByDesc layerDesc
+
+		else
+
+			layerDesc = ref()
+			.enum 'layer', 'ordinal', 'targetEnum'
+			.execGet()
+
+			@_activeLayers.push @_introduceLayerByDesc layerDesc
+
+		return
+
+	_introduceLayerByDesc: (d) ->
+
+		id = d.getInt 'layerID'
+
+		if @_layersById[id]?
+
+			return @_layersById[id]
+
+		l = @_layersById[id] = new Layer @, d, id
+
+		l
