@@ -2,56 +2,12 @@ module.exports = class ComInterface
 
 	constructor: ->
 
-		# @_unassignedIDStartsAt = do ->
+		@_strings = {}
+		@_types = {}
 
-		# 	i = 2500
+	type: (what) =>
 
-		# 	loop
-
-		# 		i++
-
-		# 		break if typeIDToStringID(i).length is 0
-
-		# 	i
-
-	# idMaybeValid: (id) ->
-
-	# 	id < @_unassignedIDStartsAt or id > @_unassignedIDStartsAt + 1000
-
-	exec: (event, desc, showDialog = no) =>
-
-		new ActionExecuter event, desc, showDialog
-
-	get: (ref) =>
-
-		ref = Ref.refify ref
-
-		new Desc executeActionGet ref
-
-	desc: =>
-
-		new Desc
-
-	ref: =>
-
-		new Ref
-
-	id: (what) =>
-
-		# direct typeID
 		if typeof what is 'number'
-
-			# unless @idMaybeValid what
-
-			# 	throw Error "typeID[#{what}] doesn't seem to be valid"
-
-			str = typeIDToStringID what
-
-			if str.length is 0
-
-				throw Error "typeID[#{what}] doesn't translate to a stringID"
-
-			# console.log "Use stringID '#{str}' instead of typeID[#{what}]"
 
 			return what
 
@@ -63,26 +19,67 @@ module.exports = class ComInterface
 
 			throw Error "Empty string/charID isn't valid"
 
-		if what.length is 4
+		@stringToType what
 
-			id = charIDToTypeID what
+	string: (what) =>
 
-			str = typeIDToStringID id
+		if typeof what is 'number'
 
-			if str.length > 0
+			return @typeToString what
 
-				# console.log "Use stringID '#{str}' instead of charID '#{what}'"
+		unless typeof what is 'string'
 
-				return id
+			throw Error "Input is not a number, nor a string"
 
-		id = stringIDToTypeID what
+		what
 
-		# unless @idMaybeValid id
+	stringToType: (string) =>
 
-		# 	console.warn "stringID '#{what}' doesn't seem to be valid"
+		tid = @_strings[string]
 
-		id
+		return tid if tid?
+
+		tid = stringIDToTypeID string
+
+		@_strings[string] = tid
+
+		tid
+
+	typeToString: (type) =>
+
+		sid = @_types[type]
+
+		return sid if sid?
+
+		sid = typeIDToStringID type
+
+		@_types[type] = sid
+
+		sid
+
+	exec: (event, desc, showDialog = no) =>
+
+		showDialog = if showDialog is yes then DialogModes.YES else DialogModes.NO
+
+		desc = Desc.descify desc
+
+		result = executeAction(@type(event), desc, showDialog)
+
+		@desc result
+
+	desc: (d) =>
+
+		new Desc d
+
+	ref: (r) =>
+
+		new Ref r
+
+	list: (l) =>
+
+		new List l
 
 Ref = require './Ref'
 Desc = require './Desc'
-ActionExecuter = require './ActionExecuter'
+List = require './List'
+# ActionExecuter = require './ActionExecuter'
