@@ -66,15 +66,19 @@ module.exports = console =
 
 		items = []
 
-		iterator = (v, k) ->
+		iterator = (v, k, addCursor = yes) ->
 
 			persist.limit--
 
 			return if persist.limit <= 0
 
-			k = k + " -> "
+			k = k + " -> " if addCursor
 
 			items.push k + console._inspectSingle(v, persist)
+
+		iterator.addLine = (stuff) ->
+
+			items.push stuff
 
 		if given instanceof Array
 
@@ -92,13 +96,15 @@ module.exports = console =
 
 				type = '#Object'
 
-				if given.constructor?.name?
+				try
 
-					name = given.constructor.name
+					if given.constructor?.name?
 
-					if name isnt 'Object'
+						name = given.constructor.name
 
-						type = '#' + name
+						if name isnt 'Object'
+
+							type = '#' + name
 
 			if isPhotoshopThingy given
 
@@ -212,11 +218,11 @@ module.exports = console =
 
 			if i is 0
 
-				iterator shortenDescValueType(type), "$type"
+				iterator.addLine "type: #{shortenDescValueType(type)}"
 
 			if i > console.actionListLimit - 1
 
-				iterator l.count, "total"
+				iterator.addLine "... total: #{l.count}"
 
 				break
 
@@ -237,7 +243,7 @@ module.exports = console =
 				iterator l.getBoolean(i), i
 
 			else if type is DescValueType.UNITDOUBLE
-				# not tested
+
 				iterator l.getUnitDoubleValue(i), i
 
 			else if type is DescValueType.ENUMERATEDTYPE
@@ -262,9 +268,43 @@ module.exports = console =
 
 		return
 
-	_iterateActionReference: (ref, persist) ->
+	_iterateActionReference: (ref, iterator) ->
 
-		@_iterateActionDescriptor executeActionGet(ref), persist
+		form = ref.getForm()
+
+		if form is ReferenceFormType.CLASSTYPE
+
+			iterator.addLine "[class]"
+
+		else if form is ReferenceFormType.ENUMERATED
+
+			iterator.addLine "[enum]"
+
+		else if form is ReferenceFormType.IDENTIFIER
+
+			iterator.addLine "[ident]"
+
+		else if form is ReferenceFormType.INDEX
+
+			iterator.addLine "[index]"
+
+		else if form is ReferenceFormType.NAME
+
+			iterator.addLine "[name]"
+
+		else if form is ReferenceFormType.OFFSET
+
+			iterator.addLine "[offset]"
+
+		else if form is ReferenceFormType.PROPERTY
+
+			iterator.addLine "[prop]"
+
+		else
+
+			iterator.addLine "#[Unkown]"
+
+		@_iterateActionDescriptor executeActionGet(ref), iterator
 
 	_output: (s) ->
 
@@ -386,7 +426,9 @@ t2s = typeIDToStringID
 
 isPhotoshopThingy = (thingy) ->
 
-	c = thingy.constructor
+	try
+
+		c = thingy.constructor
 
 	return no unless c?
 
