@@ -1,14 +1,14 @@
-DocumentsManager = require './coreClass/DocumentsManager'
-PanelHelper = require './coreClass/PanelHelper'
-com = require './coreClass/com'
+DocumentsManager = require './DocumentsManager'
+PanelHelper = require './tools/PanelHelper'
+com = require 'photoshopjs-com'
 
-module.exports = class CoreClass
+module.exports = class CoreApi
 
 	@create: (globalScope) ->
 
 		fn = ->
 
-		instance = new CoreClass fn, globalScope
+		instance = new CoreApi fn, globalScope
 
 		fn.__proto__ = instance
 

@@ -1,4 +1,4 @@
-{exec, desc, charToType, stringToType, stringToChar, typeToString} = require '../../com'
+{exec, desc, charToType, stringToType, stringToChar, typeToString} = require 'photoshopjs-com'
 
 module.exports = class GuidesManager
 

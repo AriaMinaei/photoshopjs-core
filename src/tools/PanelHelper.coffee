@@ -1,4 +1,4 @@
-JSON = require '../tools/JSON'
+JSON = require './JSON'
 
 module.exports = class PanelHelper
 

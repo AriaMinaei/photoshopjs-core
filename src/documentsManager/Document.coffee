@@ -1,6 +1,6 @@
 GuidesManager = require './document/GuidesManager'
 LayersManager = require './document/LayersManager'
-{desc} = require '../com'
+{desc} = require 'photoshopjs-com'
 
 module.exports = class Document
 

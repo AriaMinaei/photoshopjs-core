@@ -1,8 +1,8 @@
-CoreClass = require './CoreClass'
+CoreApi = require './CoreApi'
 console = require './tools/console'
 JSON = require './tools/JSON'
 
 $.global.console = console
 $.global.JSON = JSON
 
-module.exports = CoreClass.create $.global
+module.exports = CoreApi.create $.global

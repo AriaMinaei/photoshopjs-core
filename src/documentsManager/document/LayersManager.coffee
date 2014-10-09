@@ -1,4 +1,4 @@
-{ref, desc} = require '../../com'
+{ref, desc} = require 'photoshopjs-com'
 Layer = require './layersManager/Layer'
 
 module.exports = class LayersManager
@@ -77,6 +77,33 @@ module.exports = class LayersManager
 
 			return @_layersById[id]
 
-		l = @_layersById[id] = new Layer @, d, id
+		l = @_layersById[id] = new Layer @, id, d
 
 		l
+
+	_getLayerRefByID: (id) ->
+
+		ref().ident 'layer', id
+
+	reactivate: (layers) ->
+
+		console.log layers.length
+
+		unless layers instanceof Array
+
+			layers = [layers]
+
+		for l, i in layers
+
+			d = desc()
+			.ref 'null', l.getReference()
+
+			d.enum 'selectionModifier', 'selectionModifierType', 'addToSelection' if i > 0
+
+			d.exec 'select'
+
+			@_activeLayers[i] = l
+
+		@_activeLayers.length = layers.length
+
+		@
