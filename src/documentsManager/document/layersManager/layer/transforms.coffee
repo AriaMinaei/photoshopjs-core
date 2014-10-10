@@ -35,6 +35,23 @@ Layer.extend
 
 		@
 
+	scale: (x, y, aroundArgs...) ->
+
+		d = desc()
+		.ref 'null', ref().enum 'layer', 'ordinal', 'targetEnum'
+
+		@_modifyDescForAroundArgs d, aroundArgs
+
+		d
+		.unitDouble 'width', 'percentUnit', parseFloat x
+		.unitDouble 'height', 'percentUnit', parseFloat y
+		.enum 'interfaceIconFrameDimmed', 'interpolationType', 'bicubic'
+		.exec 'transform'
+
+		@
+
+
+
 	_modifyDescForAroundArgs: (d, args) ->
 
 		# midcenter by default
