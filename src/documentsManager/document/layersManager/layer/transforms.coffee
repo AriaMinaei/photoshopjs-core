@@ -23,6 +23,8 @@ Layer.extend
 
 	rotate: (ang, aroundArgs...) ->
 
+		do @activate
+
 		d = desc()
 		.ref 'null', ref().enum 'layer', 'ordinal', 'targetEnum'
 
@@ -37,6 +39,8 @@ Layer.extend
 
 	scale: (x, y, aroundArgs...) ->
 
+		do @activate
+
 		d = desc()
 		.ref 'null', ref().enum 'layer', 'ordinal', 'targetEnum'
 
@@ -49,8 +53,6 @@ Layer.extend
 		.exec 'transform'
 
 		@
-
-
 
 	_modifyDescForAroundArgs: (d, args) ->
 

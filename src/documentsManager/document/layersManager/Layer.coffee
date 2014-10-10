@@ -60,3 +60,4 @@ module.exports = class Layer
 hasProp = {}.hasOwnProperty
 
 require './layer/transforms'
+require './layer/fill'
