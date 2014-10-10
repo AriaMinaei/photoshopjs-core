@@ -42,3 +42,21 @@ module.exports = class Layer
 			@_ref = ref().ident 'layer', @id
 
 		@_ref
+
+	self = @
+
+	@extend: (obj) ->
+
+		for own name, val of obj
+
+			if hasProp.call self.prototype, name
+
+				throw Error "Layer already has a prop named '#{name}'"
+
+			self.prototype[name] = val
+
+		self
+
+hasProp = {}.hasOwnProperty
+
+require './layer/transforms'
