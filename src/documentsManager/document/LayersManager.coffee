@@ -29,7 +29,13 @@ module.exports = class LayersManager
 
 		do @_rectifyActiveLayerSituation
 
-		@_activeLayers
+		ls = []
+
+		for l in @_activeLayers
+
+			ls.push l
+
+		ls
 
 	getActiveLayer: ->
 
@@ -85,13 +91,13 @@ module.exports = class LayersManager
 
 		ref().ident 'layer', id
 
-	reactivate: (layers) ->
-
-		console.log layers.length
+	activate: (layers) ->
 
 		unless layers instanceof Array
 
 			layers = [layers]
+
+		@_activeLayers.length = 0
 
 		for l, i in layers
 
@@ -102,8 +108,6 @@ module.exports = class LayersManager
 
 			d.exec 'select'
 
-			@_activeLayers[i] = l
-
-		@_activeLayers.length = layers.length
+			@_activeLayers.push l
 
 		@

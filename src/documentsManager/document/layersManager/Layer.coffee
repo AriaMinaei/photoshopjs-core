@@ -12,18 +12,26 @@ module.exports = class Layer
 
 	setName: (name) ->
 
-		desc()
-		.ref 'null', @getReference()
-		.exec 'select'
+		do @activate
 
 		desc()
 		.ref 'null', @getReference()
-		.obj 'to', 'layer', ->
-
-			desc()
-			.str 'name', name
-
+		.obj 'to', 'layer', desc().str 'name', name
 		.exec "set"
+
+		@
+
+	isActive: ->
+
+		a = @_manager.getActive()
+
+		a.length is 1 and a[0] is @
+
+	activate: ->
+
+		return @ if @isActive()
+
+		@_manager.activate @
 
 		@
 
