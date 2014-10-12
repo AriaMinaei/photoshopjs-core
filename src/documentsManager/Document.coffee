@@ -41,7 +41,7 @@ module.exports = class Document
 
 				desc()
 				.enum "state", "state", "redrawComplete"
-			 "wait"
+			 	.exec "wait"
 
 				doc = app.activeDocument
 

@@ -43,6 +43,27 @@ module.exports = class Layer
 
 		@_ref
 
+	duplicate: (newName) ->
+
+		do @activate
+
+		d = desc()
+		.ref 'null', ref().enum 'layer', 'ordinal', 'targetEnum'
+		.int 'version', 5
+
+		if newName?
+
+			d.str 'name', newName
+
+		d.exec 'duplicate'
+
+		# get the new layer
+		layerDesc = ref()
+		.enum 'layer', 'ordinal', 'targetEnum'
+		.execGet()
+
+		@_manager._introduceLayerByDesc layerDesc
+
 	self = @
 
 	@extend: (obj) ->
